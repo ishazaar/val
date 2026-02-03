@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Be My Valentine 💘</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff758c, #ff7eb3);
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* HEARTS */
+.heart {
+    position: absolute;
+    font-size: 150px;
+    cursor: pointer;
+    animation: float 4s infinite ease-in-out;
+}
+
+@keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0); }
+}
+
+.broken {
+    animation: break 0.4s forwards;
+}
+
+@keyframes break {
+    to { transform: scale(0); opacity: 0; }
+}
+
+/* LETTER */
+.letter {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    width: 340px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+h2 { color: #ff4d6d; }
+
+.reasons {
+    text-align: left;
+    margin: 15px 0;
+}
+
+/* BUTTONS */
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#yes {
+    background: #ff4d6d;
+    color: white;
+}
+
+#no {
+    background: #ccc;
+    position: absolute;
+}
+
+/* CONFETTI */
+.confetti {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: red;
+    animation: fall 2s linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" loop>
+    <source src="love.mp3" type="audio/mpeg">
+</audio>
+
+<!-- LETTER 1 -->
+<div class="letter" id="letter">
+    <h2>Hey You 💌</h2>
+    <p>10 reasons you should go on a date with me:</p>
+    <div class="reasons">
+        1. I’ll make you laugh 😄<br>
+        2. I’m fun 💃<br>
+        3. Deep talks ☕<br>
+        4. I care 🫶<br>
+        5. Cute moments 🥰<br>
+        6. Memories ✨<br>
+        7. Honest vibes 💖<br>
+        8. I choose you 💘<br>
+        9. No regrets 😉<br>
+        10. Just say yes 😌
+    </div>
+    <button id="yes">Yes 💕</button>
+    <button id="no">No 🙃</button>
+</div>
+
+<!-- LETTER 2 -->
+<div class="letter" id="secondLetter">
+    <h2>You Said YES 🥹💖</h2>
+    <p>
+        This made my day ✨<br><br>
+        Our date is official 💕<br>
+        Can’t wait to see you 💌
+    </p>
+</div>
+
+<script>
+const music = document.getElementById("music");
+const letter = document.getElementById("letter");
+const secondLetter = document.getElementById("secondLetter");
+const yesBtn = document.getElementById("yes");
+const noBtn = document.getElementById("no");
+
+// Create hearts
+const totalHearts = 14;
+const correctIndex = Math.floor(Math.random() * totalHearts);
+
+for (let i = 0; i < totalHearts; i++) {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = i === correctIndex ? "💖" : "❤️";
+
+    heart.style.top = Math.random() * 80 + "%";
+    heart.style.left = Math.random() * 80 + "%";
+
+    if (i === correctIndex) {
+        heart.onclick = () => {
+            heart.remove();
+            showConfetti();
+            music.play();
+            letter.style.display = "block";
+            document.querySelectorAll(".heart").forEach(h => h.remove());
+        };
+    } else {
+        heart.onclick = () => heart.classList.add("broken");
+    }
+
+    document.body.appendChild(heart);
+}
+
+// No button escapes
+noBtn.addEventListener("mouseover", () => {
+    noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
+    noBtn.style.top = Math.random() * (window.innerHeight - 50) + "px";
+});
+
+// Yes → second letter + confetti
+yesBtn.onclick = () => {
+    letter.style.display = "none";
+    secondLetter.style.display = "block";
+    showConfetti();
+};
+
+// Confetti function
+function showConfetti() {
+    for (let i = 0; i < 80; i++) {
+        const confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+        confetti.style.left = Math.random() * window.innerWidth + "px";
+        confetti.style.background = `hsl(${Math.random()*360},100%,60%)`;
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 2000);
+    }
+}
+</script>
+
+</body>
+</html>
